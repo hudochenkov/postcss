@@ -2,26 +2,7 @@ import Container, { ContainerProps } from './container.js'
 import { ProcessOptions } from './postcss.js'
 import Result from './result.js'
 
-interface RootRaws {
-  /**
-   * The symbols before the first child to the start of file.
-   */
-  before?: string
-
-  /**
-   * The space symbols after the last child to the end of file.
-   */
-  after?: string
-
-  /**
-   * Is the last child has an (optional) semicolon.
-   */
-  semicolon?: boolean
-}
-
-export interface RootProps extends ContainerProps {
-  raws?: RootRaws
-}
+export type DocumentProps = ContainerProps
 
 /**
  * Represents a CSS file and contains all its parsed nodes.
@@ -32,12 +13,11 @@ export interface RootProps extends ContainerProps {
  * root.nodes.length //=> 2
  * ```
  */
-export default class Root extends Container {
-  type: 'root'
+export default class Document extends Container {
+  type: 'document'
   parent: undefined
-  raws: RootRaws
 
-  constructor (defaults?: RootProps)
+  constructor (defaults?: DocumentProps)
 
   /**
    * Returns a `Result` instance representing the root’s CSS.

@@ -1,4 +1,4 @@
-let { Declaration, AtRule, Node, Root, Rule, parse } = require('..')
+let { Declaration, AtRule, Node, Root, Rule, Document, parse } = require('..')
 let Stringifier = require('../lib/stringifier')
 
 let str
@@ -171,4 +171,93 @@ it('handles nested roots', () => {
   root.append(subRoot)
 
   expect(root.toString()).toEqual('@foo')
+})
+
+it('handles document with one root', () => {
+  let document = new Document()
+  let root = new Root()
+  root.append(new AtRule({ name: 'foo' }))
+  document.append(root)
+
+  let s = document.toString()
+
+  expect(s).toEqual('@foo')
+})
+
+it('handles document with three roots', () => {
+  let root1 = new Root()
+  root1.append(new AtRule({ name: 'foo' }))
+
+  let root2 = new Root()
+  root2.append(new Rule({ selector: 'a' }))
+
+  let root3 = new Root()
+  root3.append(new Declaration({ prop: 'color', value: 'black' }))
+
+  let document = new Document()
+  document.append(root1)
+  document.append(root2)
+  document.append(root3)
+
+  let s = document.toString()
+
+  expect(s).toEqual('@fooa {}color: black')
+})
+
+it('handles root', () => {
+  let root = new Root()
+  root.append(new AtRule({ name: 'foo' }))
+
+  let s = root.toString()
+
+  expect(s).toEqual('@foo')
+})
+
+it('handles root with after', () => {
+  let root = new Root({ raws: { after: '   ' } })
+  root.append(new AtRule({ name: 'foo' }))
+
+  let s = root.toString()
+
+  expect(s).toEqual('@foo   ')
+})
+
+it('handles document with one root. after', () => {
+  let document = new Document()
+  let root = new Root({ raws: { after: '   ' } })
+  root.append(new AtRule({ name: 'foo' }))
+  document.append(root)
+
+  let s = document.toString()
+
+  expect(s).toEqual('@foo   ')
+})
+
+it('handles document with one root. before', () => {
+  let document = new Document()
+  let root = new Root({ raws: { before: 'aleks' } })
+  root.append(new AtRule({ name: 'foo' }))
+  document.append(root)
+
+  let s = document.toString()
+
+  expect(s).toEqual('aleks@foo')
+})
+
+it('handles document with one root. before and after', () => {
+  let document = new Document()
+  let root = new Root({ raws: { before: 'aleks', after: 'developer' } })
+  root.append(new AtRule({ name: 'foo' }))
+  document.append(root)
+
+  let s = document.toString()
+
+  expect(s).toEqual('aleks@foodeveloper')
+})
+
+it('pass nodes to document', () => {
+  let root = new Root()
+  let document = new Document({ nodes: [root] })
+
+  expect(document.toString()).toEqual('')
 })

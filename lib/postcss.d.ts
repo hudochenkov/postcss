@@ -10,6 +10,7 @@ import Node, {
 } from './node.js'
 import Declaration, { DeclarationProps } from './declaration.js'
 import Root, { RootProps } from './root.js'
+import Document, { DocumentProps } from './document.js'
 import Comment, { CommentProps } from './comment.js'
 import AtRule, { AtRuleProps } from './at-rule.js'
 import Result, { Message } from './result.js'
@@ -412,6 +413,14 @@ export interface Postcss {
    * @return New root node.
    */
   root(defaults?: RootProps): Root
+
+  /**
+   * Creates a new `Document` node.
+   *
+   * @param defaults Properties for the new node.
+   * @return New document node.
+   */
+  document(defaults?: DocumentProps): Document
 
   CssSyntaxError: typeof CssSyntaxError
   Declaration: typeof Declaration
